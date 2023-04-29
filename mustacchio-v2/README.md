@@ -9,7 +9,7 @@ nmap -sC -sV <ip> -p-
 Open ports:
 - 22: ssh. OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
 - 80: http. Apache httpd 2.4.18 ((Ubuntu))
-- 8765: http. nginx 1.10.3 (Ubuntu). Title: Mustacchio | Login
+- 8765: http. Nginx 1.10.3 (Ubuntu). Title: Mustacchio | Login
 
 None of the versions appear to be vulnerable.
 
@@ -25,7 +25,7 @@ Interesting directories:
 - /custom
 
 Looking in the custom directory found the css and js directories. js contained an SQL backup file users.bak which after running strings gave me the following hashed credentials:
-**admin:1868e36a6d2b17d4c2745f1659433a54d4bc5f4b**
+**admin : 1868e36a6d2b17d4c2745f1659433a54d4bc5f4b**
 
 ### Port 8765 - Admin login
 ```
@@ -45,7 +45,7 @@ john --wordlist=rockyou.txt hash
 ```
 **admin : bulldog19**
 
-This allowed me to login as admin at http://<ip>:8765, which led me to an admin panel where I could add a comment to the website. Looking at the source code revealed 3 interesting things:
+This allowed me to login as admin at http://$ip:8765, which led me to an admin panel where I could add a comment to the website. Looking at the source code revealed 3 interesting things:
 
 1) The comment 'Barry, you can now SSH in using your key!' 
 2) The presence of a file '/auth/dontforget.bak'
