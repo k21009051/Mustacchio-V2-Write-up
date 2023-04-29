@@ -9,7 +9,7 @@ nmap -sC -sV <ip> -p-
 Open ports:
 - 22: ssh. OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
 - 80: http. Apache httpd 2.4.18 ((Ubuntu))
-- 8765: http. nginx 1.10.3 (Ubuntu). Title: Mustacchio | Login
+- 8765: http. Nginx 1.10.3 (Ubuntu). Title: Mustacchio | Login
 
 None of the versions appear to be vulnerable.
 
@@ -25,7 +25,7 @@ Interesting directories:
 - /custom
 
 Looking in the custom directory found the css and js directories. js contained an SQL backup file users.bak which after running strings gave me the following hashed credentials:
-**admin:1868e36a6d2b17d4c2745f1659433a54d4bc5f4b**
+**admin : 1868e36a6d2b17d4c2745f1659433a54d4bc5f4b**
 
 ### Port 8765 - Admin login
 ```
@@ -45,7 +45,7 @@ john --wordlist=rockyou.txt hash
 ```
 **admin : bulldog19**
 
-This allowed me to login as admin at http://<ip>:8765, which led me to an admin panel where I could add a comment to the website. Looking at the source code revealed 3 interesting things:
+This allowed me to login as admin at http://$ip:8765, which led me to an admin panel where I could add a comment to the website. Looking at the source code revealed 3 interesting things:
 
 1) The comment 'Barry, you can now SSH in using your key!' 
 2) The presence of a file '/auth/dontforget.bak'
@@ -76,7 +76,7 @@ xml=<!DOCTYPE+replace+[<!ENTITY+name+SYSTEM+'file%3a///etc/passwd'>+]>
 ```
 
 And it worked! Three users have bash on the system: root, joe, and barry.
-Previous information told me barry has an ssh key, so I looked in /home/barry and found it
+Previous information told me barry has an ssh key, so I looked in /home/barry/.ssh and found it
 
 ```
 -----BEGIN RSA PRIVATE KEY-----
@@ -125,12 +125,12 @@ This quickly cracked the credentials:
 
 ```
 chmod 600 key
-ssh barry@<ip> -i key
+ssh barry@$ip -i key
 ```
 
 After giving the key the correct permissions I logged into ssh with barry's private key. This gave me the first flag from Barry's home directory.
 
-## Privilege Escalation to joe - SETUID and PATH exploitation
+## Privilege Escalation to root - SETUID and PATH exploitation
 
 Looking for SETUID binaries:
 
