@@ -10,6 +10,8 @@ Open ports:
 - 22: ssh. OpenSSH 7.6p1 Ubuntu 4ubuntu0.3
 - 30024: tcp. vsftpd 3.0.3. Anonymous login allowed
 
+None of the versions appear to be vulnerable.
+
 
 ## FTP and John the Ripper
 
