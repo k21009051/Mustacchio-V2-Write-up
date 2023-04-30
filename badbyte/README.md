@@ -21,14 +21,14 @@ ftp <ip> 30024
 get note.txt
 get id_rsa
 ```
-note.txt informs us about the key in the same directory and gives us the username **errorcauser**, so I downloaded it and used ssh2john with John the Ripper to attempt to crack the private key.
+note.txt informs us about the key in the same directory and gives us a username **errorcauser**, so I downloaded the private key and used ssh2john with John the Ripper and the rockyou wordlist to attempt to crack the key.
 
 ```
 ssh2john id_rsa > johnkey
 john --wordlist=rockyou.txt johnkey
 ```
 
-which quickly cracked the credentials: **errorcauser : cupcake**.
+which quickly cracked the credentials for ssh: **errorcauser : cupcake**.
 
 
 ## SSH
@@ -48,12 +48,11 @@ You can check it out, you already know what to do.
 -Cth
 :)
 ```
-This may indicate that the current theme is vulnerable.
 
 
 ## Wordpress Enumeration
 
-After using dynamic port forwarding and proxychains to bypass the firewall, I evaluated the web server running on port 80 using nmap with http-wordpress-enum and wpscan.
+After using dynamic port forwarding and proxychains to bypass the firewall, I evaluated the webserver running on port 80 using nmap with http-wordpress-enum and wpscan.
 
 ```
 proxychains nmap -sT 127.0.0.1 --script=http-wordpress-enum
@@ -74,13 +73,13 @@ This gave me a meterpreter session, where I could find the flag in cth's home di
 
 ## Privilege Escalation to root
 
-When browsing the file system, I found an interesting file /var/log/bash.log. This contained the password **G00dP@$sw0rd2020** so I tried to ssh to the cth user with this password.
+When browsing the file system, I found an interesting log file /var/log/bash.log. This contained the password **G00dP@$sw0rd2020** so I tried to ssh to get a proper shell for the cth user with this password.
 
 ```
 ssh cth@<ip> -i id_rsa -D 1337
 ```
 
-However, it said the password was incorrect. After some head scratching, I tried to brute force ssh with some similar passwords, and eventually got in with **G00dP@$sw0rd2021**.
+However, it said the password was incorrect. After some head scratching, I tried to brute force ssh with some similar passwords, and eventually got in with **G00dP@$sw0rd2021** by incrementing the year at the end of the password. I then logged in as cth.
 
 Evaluating the sudo permissions to find a privilege escalation vector:
 ```
