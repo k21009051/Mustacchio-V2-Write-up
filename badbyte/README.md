@@ -15,6 +15,7 @@ None of the versions appear to be vulnerable.
 
 ## FTP and John the Ripper
 
+Nmap showed we have anonymous access to the ftp server with some interesting files:
 ```
 ftp <ip> 30024
 get note.txt
@@ -37,7 +38,8 @@ chmod 600 id_rsa
 ssh errorcauser@<ip> -i id_rsa -D 1337
 ```
 
-I now have an initial shell on the machine. Reading note.txt in the current directory gives some interesting information:
+I gave the key the correct permissions and used tunnelling to bypass the firewall and get an initial shell on the system.
+Some helpful information was found in the note.txt file in the current directory:
 ```
 Hi Error!
 I've set up a webserver locally so no one outside could access it.
@@ -51,7 +53,7 @@ This may indicate that the current theme is vulnerable.
 
 ## Wordpress Enumeration
 
-After using dynamic port forwarding to bypass the firewall, I evaluated the web server running on port 80 using nmap with http-wordpress-enum and wpscan.
+After using dynamic port forwarding and proxychains to bypass the firewall, I evaluated the web server running on port 80 using nmap with http-wordpress-enum and wpscan.
 
 ```
 proxychains nmap -sT 127.0.0.1 --script=http-wordpress-enum
@@ -59,8 +61,7 @@ wpscan --url http://127.0.0.1:<port> -e ap,at -vv
 ```
 
 note.txt indicated that the theme might be vulnerable, and running searchsploit on the installed duplicator plugin found by nmap confirmed an arbitrary file read exploit.
-
-The more interesting vulnerability, though, is in the wp-file-manager plugin with version 6.0.
+The more interesting vulnerability, though, is in the wp-file-manager plugin with version 6.0, so I fired up Metasploit to exploit it.
 
 ```
 msfconsole
