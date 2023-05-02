@@ -11,7 +11,7 @@ Open ports:
 - ssh: 22. OpenSSH 7.2p2 Ubuntu
 
 
-## FTP
+## FTP - Anonymous login
 
 ```
 ftp <ip>
