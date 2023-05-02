@@ -114,4 +114,4 @@ strings /root/root.txt
 ```
 And this gave me the root flag :)
 
-I did briefly attempt to get a shell as root by reading /etc/shadow, but the hash wasn't easily crackable so I figured this isn't intended or necessary.
+I did briefly attempt to get a shell as root by reading /etc/shadow, but the hash wasn't easily crackable so I figured this wasn't intended.
