@@ -11,6 +11,8 @@ Open ports:
 - 22: ssh. OpenSSH 7.2p2 Ubuntu
 - 80: http. Apache httpd 2.4.18
 
+None of the versions appear to be vulnerable.
+
 
 ## HTTP
 
